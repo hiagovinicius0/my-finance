@@ -1,10 +1,14 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Grid from "../Grid";
 import * as C from "./styles";
-import { Transaction } from "@/app/constants";
+import { CreateTransaction, Transaction } from "@/app/constants";
+import { Select } from "./Select";
+import { OptionsProps, getOptions } from "@/app/services/options";
+import { getTransactions } from "@/app/services/transactions";
 
 interface FormProps {
-	handleAdd: (transaction: Transaction) => void;
+	handleAdd: (transaction: CreateTransaction) => void;
 	transactionsList: Transaction[];
 	setTransactionsList: Dispatch<SetStateAction<Transaction[]>>;
 }
@@ -17,8 +21,9 @@ const Form = ({
 	const [desc, setDesc] = useState("");
 	const [amount, setAmount] = useState(0);
 	const [isExpense, setExpense] = useState(false);
-
-	const generateID = () => Math.round(Math.random() * 1000);
+	const [type, setType] = useState("");
+	const [options, setOptions] = useState<OptionsProps[]>([]);
+	const [reload, setReload] = useState<boolean>(false);
 
 	const handleSave = () => {
 		if (!desc || !amount) {
@@ -30,17 +35,36 @@ const Form = ({
 		}
 
 		const transaction = {
-			id: generateID(),
-			desc: desc,
+			description: desc,
 			amount: amount,
 			expense: isExpense,
+			optionId: parseInt(type),
 		};
 
 		handleAdd(transaction);
 
 		setDesc("");
 		setAmount(0);
+		setType("");
+		getTransactionsApi();
 	};
+
+	const getOptionsApi = async () => {
+		setOptions(await getOptions(isExpense));
+	};
+
+	const getTransactionsApi = async () => {
+		setTransactionsList(await getTransactions());
+		setReload(false);
+	};
+
+	useEffect(() => {
+		getOptionsApi();
+	}, [isExpense]);
+
+	useEffect(() => {
+		getTransactionsApi();
+	}, [reload]);
 
 	return (
 		<>
@@ -74,9 +98,13 @@ const Form = ({
 					/>
 					<C.Label htmlFor="rExpenses">Saída</C.Label>
 				</C.RadioGroup>
+				<C.InputContent>
+					<C.Label>Tipo</C.Label>
+					<Select options={options} setValue={setType} value={type} />
+				</C.InputContent>
 				<C.Button onClick={handleSave}>ADICIONAR</C.Button>
 			</C.Container>
-			<Grid itens={transactionsList} setItens={setTransactionsList} />
+			<Grid itens={transactionsList} setReload={setReload} />
 		</>
 	);
 };

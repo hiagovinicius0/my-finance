@@ -32,6 +32,14 @@ export const Input = styled.input`
 	border: 1px solid #ccc;
 `;
 
+export const Select = styled.select`
+	outline: none;
+	border-radius: 5px;
+	padding: 5px 10px;
+	font-size: 15px;
+	border: 1px solid #ccc;
+`;
+
 export const RadioGroup = styled.div`
 	display: flex;
 	align-items: center;

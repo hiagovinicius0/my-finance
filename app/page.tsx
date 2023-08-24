@@ -4,7 +4,8 @@ import GlobalStyle from "./styles/global";
 import Header from "./components/Header";
 import Resume from "./components/Resume";
 import Form from "./components/Form";
-import { Transaction } from "./constants";
+import { CreateTransaction, Transaction } from "./constants";
+import { createTransaction } from "./services/transactions";
 
 const HomePage = () => {
 	const data = "[]";
@@ -34,12 +35,8 @@ const HomePage = () => {
 		setTotal(`${Number(income) < Number(expense) ? "-" : ""}R$ ${total}`);
 	}, [transactionsList]);
 
-	const handleAdd = (transaction: Transaction) => {
-		const newArrayTransactions = [...transactionsList, transaction];
-
-		setTransactionsList(newArrayTransactions);
-
-		localStorage.setItem("transactions", JSON.stringify(newArrayTransactions));
+	const handleAdd = async (transaction: CreateTransaction) => {
+		await createTransaction(transaction);
 	};
 
 	return (

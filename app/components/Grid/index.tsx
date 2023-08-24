@@ -2,23 +2,24 @@ import React, { Dispatch, SetStateAction } from "react";
 import GridItem from "../GridItem";
 import * as C from "./styles";
 import { Transaction } from "@/app/constants";
+import { deleteTransaction } from "@/app/services/transactions";
 
 interface GridProps {
 	itens: Transaction[];
-	setItens: Dispatch<SetStateAction<Transaction[]>>;
+	setReload: Dispatch<SetStateAction<boolean>>;
 }
 
-const Grid = ({ itens, setItens }: GridProps) => {
+const Grid = ({ itens, setReload }: GridProps) => {
 	const onDelete = (ID: number) => {
-		const newArray = itens.filter((transaction) => transaction.id !== ID);
-		setItens(newArray);
-		localStorage.setItem("transactions", JSON.stringify(newArray));
+		deleteTransaction(ID);
+		setReload(true);
 	};
 
 	return (
 		<C.Table>
 			<C.Thead>
 				<C.Tr>
+					<C.Th width={40}>Descrição</C.Th>
 					<C.Th width={40}>Descrição</C.Th>
 					<C.Th width={40}>Valor</C.Th>
 					<C.Th width={10} alignCenter>
