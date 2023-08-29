@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction } from "react";
 import * as C from "./styles";
-import { Option } from "@/app/services/options";
+import { OptionsProps } from "@/app/services/options";
 
 interface SelectProps {
 	value: string;
 	setValue: Dispatch<SetStateAction<string>>;
-	options: Option[];
+	options: OptionsProps[];
 }
 
 export const Select = ({ options, setValue, value }: SelectProps) => {

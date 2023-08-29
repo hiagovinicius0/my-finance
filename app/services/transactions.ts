@@ -1,8 +1,18 @@
-import { CreateTransaction } from "../constants";
+import { CreateTransaction, Transaction } from "../constants";
 
 export const getTransactions = async () => {
 	const response = await fetch(
 		process.env.NEXT_PUBLIC_URL + `/transactions?_expand=option`
+	);
+	return response.json();
+};
+
+export const getAllTransactions = async (): Promise<Transaction[]> => {
+	const response = await fetch(
+		process.env.NEXT_PUBLIC_URL + `/transactions?_expand=option`,
+		{
+			cache: "force-cache",
+		}
 	);
 	return response.json();
 };

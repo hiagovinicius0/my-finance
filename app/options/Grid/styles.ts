@@ -17,14 +17,13 @@ export const Tbody = styled.tbody``;
 export const Tr = styled.tr``;
 
 interface ThProps {
-	alignCenter?: boolean;
-	width: number;
+	$aligncenter?: boolean;
+	$width?: number;
 }
 
 export const Th = styled.th<ThProps>`
-	text-align: start;
 	border-bottom: inset;
 	padding-bottom: 5px;
-	text-align: ${(props) => (props.alignCenter ? "center" : "start")};
-	width: ${(props) => (props.width ? props.width + "%" : "auto")};
+	text-align: ${(props) => (props.$aligncenter ? "center" : "start")};
+	width: ${(props) => (props.$width ? props.$width + "%" : "auto")};
 `;
